@@ -1,0 +1,47 @@
+const { StatusCodes }= require('http-status-codes');
+
+const { CityService } = require('../services/index');
+const city = require('../models/city');
+const { SuccessResponse, ErrorResponse } = require('../utils/common');
+
+
+async function createCity(req,res)
+{
+     try {
+        const city = await CityService.createCity({
+            name: req.body.name,
+           
+        });
+        SuccessResponse.data = city;
+        return res
+                 .status(StatusCodes.CREATED)
+                 .json(SuccessResponse)
+    } catch (error)
+     {
+        ErrorResponse.error=error;
+        return res
+                 .status(error.statusCodes)
+                 .json(ErrorResponse)
+     }
+}
+async function getCity(req,res)
+{
+    try {
+        const city = await CityService.getCity();
+        SuccessResponse.data=city;
+        return res 
+                 .status(StatusCodes.OK)
+                 .json(SuccessResponse)
+                 
+    } catch (error) {
+        ErrorResponse.error=error;
+        return res 
+                 .status(error.statusCodes)
+                 .json(ErrorResponse)
+    }
+}
+
+module.exports={
+    createCity,
+    getCity
+}
